@@ -126,11 +126,23 @@ class IsiScanner(object):
     def nextChar(self):
         return self.content[self.posicao + 1]
 
+    def lastChar(self):
+        return self.content[self.posicao - 1]
+
     def isEOF(self):
         return self.posicao == len(self.content)
 
     def isChar(c):
         return (c >= 'a' and c <= 'z') or (c >= 'A' and c <= 'Z')
+
+    def isDigit(c):
+        return c >= '0' and c <= '9'
+
+    def isOperator(c):
+        return (c == '>')or(c == '<')or(c == '=')or(c == '!')
+    
+    def isSpace(c):
+        return (c == ' ')or(c == '\n')or(c == '\t')or(c == '\r')
 
     def back(self):
         self.posicao = self.posicao - 1

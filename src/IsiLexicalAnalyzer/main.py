@@ -6,13 +6,10 @@ from Token import *
 
 try:
     sc = IsiScanner("HelloWorld.isi")
-    while True:
-        print("Fetching next token...")
+    token = sc.nextToken()
+    while token != None:
         token = sc.nextToken()
-        if(token):
-            token.toString()
-        else:
-            break
+        print(token.toString())
 except:
     raise Exception("Lexical ERROR")
 finally:

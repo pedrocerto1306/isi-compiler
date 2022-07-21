@@ -1,5 +1,4 @@
 class Token():
-    #Tokens definidos para a IsiLanguage
     TK_IDENT        = 0
     TK_NUMBER       = 1
     TK_OPERATOR     = 2
@@ -9,6 +8,7 @@ class Token():
     tipo = 0
     text = ""
 
+    #Tokens definidos para a IsiLanguage
     def __init__(self, tipo, text):
         self.tipo = tipo
         self.text = text

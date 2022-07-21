@@ -1,31 +1,27 @@
-from calendar import c
-from logging import raiseExceptions
 import Token
-
+from IsiScanner import *
+from Token import *
 from numpy import chararray
 
-class IsiScanner(object):
+class IsiScanner():
     
-    content = chararray()
+    content = ''
     estado = 0
     posicao = 0
 
     def __init__(self, filename):
         try:
             txtConteudo = ""
-            with open(filename, "r") as isiProgram:
-                txtConteudo = isiProgram.read()
-                print("DEBUG============")
-                print(txtConteudo)
-                print("=================")
-
-                self.content = isiProgram.extend()
+            with open(filename) as isiProgram:
+                self.content = isiProgram.read()
+                # txtConteudo = isiProgram.read()
+                # for char in txtConteudo:
+                #     self.content = char
         except:
             raise Exception("Erro léxico!")
 
 
     def nextToken(self):
-        token = Token()
 
         currChar = ""
         term = ""
@@ -34,8 +30,12 @@ class IsiScanner(object):
             return None
 
         self.estado = 0
+
         while True:
             currChar = self.nextChar()
+            self.executeState(self.estado, currChar, term)
+            if(self.estado == 2 or self.estado == 4 or self.estado == 6 or self.estado == 7):
+                break
 
 
 
@@ -132,17 +132,17 @@ class IsiScanner(object):
     def isEOF(self):
         return self.posicao == len(self.content)
 
-    def isChar(c):
-        return (c >= 'a' and c <= 'z') or (c >= 'A' and c <= 'Z')
+    def isChar(char):
+        return (char >= 'a' and char <= 'z') or (char >= 'A' and char <= 'Z')
 
-    def isDigit(c):
-        return c >= '0' and c <= '9'
+    def isDigit(char):
+        return char >= '0' and char <= '9'
 
-    def isOperator(c):
-        return (c == '>')or(c == '<')or(c == '=')or(c == '!')
+    def isOperator(char):
+        return (char == '>')or(char == '<')or(char == '=')or(char == '!')
     
-    def isSpace(c):
-        return (c == ' ')or(c == '\n')or(c == '\t')or(c == '\r')
+    def isSpace(char):
+        return (char == ' ')or(char == '\n')or(char == '\t')or(char == '\r')
 
     def back(self):
         self.posicao = self.posicao - 1

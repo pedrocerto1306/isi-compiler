@@ -1,16 +1,19 @@
+from pandas import isnull
 import IsiScanner
-import Token
 
-def main():
-    try:
-        sc = IsiScanner(r'./HelloWorld.isi')
-        token = Token()
-        while True:
-            token = sc.nextToken()
-            if(token != None):
-                print(token)
-                break
-    except:
-        raise Exception("Lexical ERROR")
-    finally:
-        print("End of Lexical Analysis")
+from IsiScanner import *
+from Token import *
+
+try:
+    sc = IsiScanner("HelloWorld.isi")
+    while True:
+        print("Fetching next token...")
+        token = sc.nextToken()
+        if(token):
+            token.toString()
+        else:
+            break
+except:
+    raise Exception("Lexical ERROR")
+finally:
+    print("End of Lexical Analysis")

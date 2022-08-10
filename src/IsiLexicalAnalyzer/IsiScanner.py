@@ -1,4 +1,4 @@
-import Token
+from Token import *
 
 class IsiScanner():
     
@@ -12,6 +12,8 @@ class IsiScanner():
         try:
             with open(filename) as isiProgram:
                 self.content = isiProgram.read()
+                self.currChar = self.content[0]
+                self.state = 0
         except:
             raise Exception("Erro léxico!")
 
@@ -22,36 +24,40 @@ class IsiScanner():
             return None
 
         self.state = 0
-        self.currChar = self.content[0]
 
         while True:
             self.executeState()
             self.currChar = self.nextChar()
             if(self.state == 2 or self.state == 4 or self.state == 6 or self.state == 7):
-                break
+                token = self.executeReturnTokenStates()
+                self.term = ""
+                return token
 
+    def executeReturnTokenStates(self) -> Token:
+        if self.state == 2:
+            return self.stateTwo()
+        elif self.state == 4:
+            self.stateFour()
+        elif self.state == 6:
+            return self.stateSix()
+        elif self.state == 7:
+            return self.stateSeven()
+        else:
+            raise Exception("invalid state to return a token!")
+        
 
-
+    #Funções correpondentes aos nós internos do automato do scanner
     def executeState(self):
-
         if self.state == 0:
             self.stateZero()
         elif self.state == 1:
             self.stateOne()
-        elif self.state == 2:
-            self.stateTwo()
         elif self.state == 3:
             self.stateThree()
-        elif self.state == 4:
-            self.stateFour()
         elif self.state == 5:
             self.stateFive()
-        elif self.state == 6:
-            self.stateSix()
-        elif self.state == 7:
-            self.stateSeven()
         else:
-            raise Exception("Invalid State!")
+            raise Exception("Invalid scanner state!")
 
 #Funções de estado
     def stateZero(self):
@@ -63,7 +69,7 @@ class IsiScanner():
             self.state = 3
         elif(self.isSpace(self.currChar)):
             self.state = 0
-        elif(self.isOperator(self.currChar)):
+        elif(self.isPrimaryOperator()):
             self.state = 5
         else:
             raise Exception("Unrecognized Symbol")
@@ -77,12 +83,10 @@ class IsiScanner():
         else:
             raise Exception("Malformed Identifier")
 
-    def stateTwo(self):
+    def stateTwo(self) -> Token:
         self.back()
-        token = Token()
-        token.setTipo(Token.TK_IDENT)
-        token.setText(self.term)
-        return token
+        tk_identificador = Token(Token.TK_IDENT, self.term)
+        return tk_identificador
 
     def stateThree(self):
         if(self.isDigit(self.currChar)):
@@ -94,15 +98,14 @@ class IsiScanner():
             raise Exception("Unrecognized NUMBER")
 
     def stateFour(self):
-        token = Token()
-        token.setTipo(Token.TK_NUMBER)
-        token.setText(self.term)
         self.back()
-        return token
+        return Token(Token.TK_NUMBER, self.term)
 
     def stateFive(self):
         self.term += self.currChar
+        self.currChar = self.nextChar()
         if(self.isOperator(self.currChar)):
+            self.term += self.currChar
             self.state = 7
         elif(not self.isOperator(self.currChar)):
             self.state = 6
@@ -111,17 +114,11 @@ class IsiScanner():
 
     def stateSix(self):
         self.back()
-        token = Token()
-        token.setTipo(Token.TK_ASSIGN)
-        token.setText(self.term)
-        return token
+        return Token(Token.TK_ASSIGN, self.term)
 
     def stateSeven(self):
         self.back()
-        token = Token()
-        token.setTipo(Token.TK_OPERATOR)
-        token.setText(self.term)
-        return token
+        return Token(Token.TK_OPERATOR, self.term)
         
 #Funções auxiliares
     def nextChar(self):
@@ -139,6 +136,9 @@ class IsiScanner():
 
     def isDigit(self, char):
         return char >= '0' and char <= '9'
+
+    def isPrimaryOperator(self):
+        return (self.currChar == ':')
 
     def isOperator(self, char):
         return (char == '>')or(char == '<')or(char == '=')or(char == '!')

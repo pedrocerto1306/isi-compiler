@@ -1,12 +1,12 @@
 from IsiScanner import *
-
+from Token import *
 
 try:
     sc = IsiScanner("HelloWorld.isi")
     token = sc.nextToken()
     while token != None:
+        print(token.__str__())
         token = sc.nextToken()
-        print(token.toString())
 except:
     raise Exception("Lexical ERROR")
 finally:

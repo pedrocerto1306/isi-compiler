@@ -1,4 +1,7 @@
-aaa123
+num1 := 1
+num2 := 2
 
-134
-=
+se a >= b
+{
+    escreva("A maior!")
+}

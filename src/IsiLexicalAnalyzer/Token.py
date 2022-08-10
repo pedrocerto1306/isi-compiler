@@ -1,4 +1,5 @@
 class Token():
+    #Tipos de tokens disponíveis na IsiLanguage
     TK_IDENT        = 0
     TK_NUMBER       = 1
     TK_OPERATOR     = 2
@@ -12,6 +13,9 @@ class Token():
     def __init__(self, tipo, text):
         self.tipo = tipo
         self.text = text
+
+    def __str__(self) -> str:
+        return self.toString()
 
     def getTipo(self):
         return self.tipo

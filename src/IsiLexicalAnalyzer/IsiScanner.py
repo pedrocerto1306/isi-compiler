@@ -1,130 +1,132 @@
 import Token
-from IsiScanner import *
-from Token import *
-from numpy import chararray
 
 class IsiScanner():
     
     content = ''
-    estado = 0
+    state = 0
     posicao = 0
+    currChar = ""
+    term = ""
 
     def __init__(self, filename):
         try:
-            txtConteudo = ""
             with open(filename) as isiProgram:
                 self.content = isiProgram.read()
-                # txtConteudo = isiProgram.read()
-                # for char in txtConteudo:
-                #     self.content = char
         except:
             raise Exception("Erro léxico!")
 
 
     def nextToken(self):
 
-        currChar = ""
-        term = ""
-
         if self.isEOF():
             return None
 
-        self.estado = 0
+        self.state = 0
+        self.currChar = self.content[0]
 
         while True:
-            currChar = self.nextChar()
-            self.executeState(self.estado, currChar, term)
-            if(self.estado == 2 or self.estado == 4 or self.estado == 6 or self.estado == 7):
+            self.executeState()
+            self.currChar = self.nextChar()
+            if(self.state == 2 or self.state == 4 or self.state == 6 or self.state == 7):
                 break
 
 
 
-    def executeState(self, state, currChar, term):
-        switcher = {
-            0: self.stateZero(currChar, term),
-            1: self.stateOne(currChar, term),
-            2: self.stateTwo(term),
-            3: self.stateThree(currChar, term),
-            4: self.stateFour(term),
-            5: self.stateFive(currChar, term),
-            6: self.stateSix(term),
-            7: self.stateSeven(term)
-        }
-        return switcher.get(state, "Invalid State!")
+    def executeState(self):
+
+        if self.state == 0:
+            self.stateZero()
+        elif self.state == 1:
+            self.stateOne()
+        elif self.state == 2:
+            self.stateTwo()
+        elif self.state == 3:
+            self.stateThree()
+        elif self.state == 4:
+            self.stateFour()
+        elif self.state == 5:
+            self.stateFive()
+        elif self.state == 6:
+            self.stateSix()
+        elif self.state == 7:
+            self.stateSeven()
+        else:
+            raise Exception("Invalid State!")
 
 #Funções de estado
-    def stateZero(self, currChar, term):
-        if(self.isChar(currChar)):
-            self.term += currChar
-            self.estado = 1
-        elif(self.isDigit(currChar)):
-            term += currChar
-            self.estado = 3
-        elif(self.isSpace(currChar)):
-            self.estado = 0
-        elif(self.isOperator(currChar)):
-            self.estado = 5
+    def stateZero(self):
+        if(self.isChar(self.currChar)):
+            self.term += self.currChar
+            self.state = 1
+        elif(self.isDigit(self.currChar)):
+            self.term += self.currChar
+            self.state = 3
+        elif(self.isSpace(self.currChar)):
+            self.state = 0
+        elif(self.isOperator(self.currChar)):
+            self.state = 5
         else:
             raise Exception("Unrecognized Symbol")
 
-    def stateOne(self, currChar, term):
-        if(self.isChar(currChar) or self.isDigit(currChar)):
-            self.estado = 1
-            term += currChar
-        elif(self.isSpace(currChar) or self.isOperator(currChar)):
-            self.estado = 2
+    def stateOne(self):
+        if(self.isChar(self.currChar) or self.isDigit(self.currChar)):
+            self.state = 1
+            self.term += self.currChar
+        elif(self.isSpace(self.currChar) or self.isOperator(self.currChar)):
+            self.state = 2
         else:
             raise Exception("Malformed Identifier")
 
-    def stateTwo(self, term):
+    def stateTwo(self):
         self.back()
         token = Token()
         token.setTipo(Token.TK_IDENT)
-        token.setText(term)
+        token.setText(self.term)
         return token
 
-    def stateThree(self, currChar, term):
-        if(self.isDigit(currChar)):
-            term += currChar
-            self.estado = 3
-        elif(not self.isDigit(currChar)):
-            self.estado = 4
+    def stateThree(self):
+        if(self.isDigit(self.currChar)):
+            self.term += self.currChar
+            self.state = 3
+        elif(not self.isDigit(self.currChar)):
+            self.state = 4
         else:
             raise Exception("Unrecognized NUMBER")
 
-    def stateFour(self, term):
+    def stateFour(self):
         token = Token()
         token.setTipo(Token.TK_NUMBER)
-        token.setText(term)
+        token.setText(self.term)
         self.back()
         return token
 
-    def stateFive(self, currChar, term):
-        term += currChar
-        if(self.isOperator(currChar)):
-            self.estado = 7
-        elif(not self.isOperator(currChar)):
-            self.estado = 6
+    def stateFive(self):
+        self.term += self.currChar
+        if(self.isOperator(self.currChar)):
+            self.state = 7
+        elif(not self.isOperator(self.currChar)):
+            self.state = 6
         else:
             raise Exception("Unrecognized OPERATOR")
 
-    def stateSix(self, term):
+    def stateSix(self):
         self.back()
         token = Token()
         token.setTipo(Token.TK_ASSIGN)
-        token.setText(term)
+        token.setText(self.term)
         return token
 
-    def stateSeven(self, term):
+    def stateSeven(self):
         self.back()
         token = Token()
         token.setTipo(Token.TK_OPERATOR)
-        token.setText(term)
+        token.setText(self.term)
         return token
         
 #Funções auxiliares
     def nextChar(self):
-        return self.content[self.posicao + 1]
+        self.posicao = self.posicao + 1
+        return self.content[self.posicao]
 
     def lastChar(self):
         return self.content[self.posicao - 1]
@@ -132,16 +134,16 @@ class IsiScanner():
     def isEOF(self):
         return self.posicao == len(self.content)
 
-    def isChar(char):
+    def isChar(self, char):
         return (char >= 'a' and char <= 'z') or (char >= 'A' and char <= 'Z')
 
-    def isDigit(char):
+    def isDigit(self, char):
         return char >= '0' and char <= '9'
 
-    def isOperator(char):
+    def isOperator(self, char):
         return (char == '>')or(char == '<')or(char == '=')or(char == '!')
     
-    def isSpace(char):
+    def isSpace(self, char):
         return (char == ' ')or(char == '\n')or(char == '\t')or(char == '\r')
 
     def back(self):

@@ -1,8 +1,5 @@
-from pandas import isnull
-import IsiScanner
-
 from IsiScanner import *
-from Token import *
+
 
 try:
     sc = IsiScanner("HelloWorld.isi")

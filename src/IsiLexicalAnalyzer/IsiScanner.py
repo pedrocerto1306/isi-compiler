@@ -106,9 +106,9 @@ class IsiScanner():
         self.currChar = self.nextChar()
         if(self.isOperator(self.currChar)):
             self.term += self.currChar
-            self.state = 7
-        elif(not self.isOperator(self.currChar)):
             self.state = 6
+        elif(not self.isOperator(self.currChar)):
+            self.state = 7
         else:
             raise Exception("Unrecognized OPERATOR")
 

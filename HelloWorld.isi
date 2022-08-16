@@ -1,7 +1,16 @@
-num1 := 1
-num2 := 2
+programa
 
-se a >= b
+num1 := 1.
+num2 := 2.
+
+se (num1 >= num2) entao
 {
-    escreva("A maior!")
+    escreva("Primeiro numero maior!").
 }
+
+prod := num1 * num2 + 4
+
+escreva("resultado do produto acrescido de 4 igual a ")
+escreva(prod)
+
+fimprog.

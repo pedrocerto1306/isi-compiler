@@ -11,3 +11,5 @@ except:
     raise Exception("Lexical ERROR")
 finally:
     print("End of Lexical Analysis")
+
+#C:\Users\Pedro Certo\IdeaProjects\AnalisadorLexico

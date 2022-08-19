@@ -1,0 +1,20 @@
+programa
+
+	declare number a, b, c, d.
+	declare text t.
+
+	a := 3;3.
+	b := 5.
+	c := 2.
+
+	t := a.
+
+	d := c * a + b.
+
+	enquanto (a<b) faça {
+		escreva(a).
+	}
+
+    escreva(d).
+
+fimprog.

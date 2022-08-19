@@ -87,7 +87,10 @@ cmdattrib:
 cmdcondicao:
 	'se' AP ID OPREL (ID | NUMBER) FP 'entao' ACH (cmd)+ FCH (
 		'senao' ACH (cmd)+ FCH
-	)?;
+	)?
+	| 'escolha' AP ID FP ACH (
+		'caso' AP (ID | NUMBER) FP DP (cmd)+ 'quebra.'
+	)* FCH;
 
 cmdrepeticao:
 	'enquanto' AP ID OPREL (ID | NUMBER) FP 'faça' ACH (cmd)+ FCH { //System.out.println("Sintaxe do laço funcionando!") ;
@@ -100,6 +103,8 @@ termo:
 	| NUMBER
 	| TEXT
 	| BOOL;
+
+DP: ':';
 
 AP: '(';
 

@@ -15,6 +15,15 @@ programa
 		escreva(a).
 	}
 
+	escolha (a){
+		caso(1):
+			escreva(a).
+			quebra.
+		caso(2):
+			escreva(b).
+			quebra.
+	}
+
     escreva(d).
 
 fimprog.

@@ -3,6 +3,7 @@ package br.com.comp2022.isilang.datastructures;
 public abstract class IsiSymbol {
 
     protected String name;
+    public abstract String generateJavaCode();
 
     public String getName() {
         return name;

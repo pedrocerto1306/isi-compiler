@@ -1,0 +1,36 @@
+programa
+  declare numero a, b, c,d.
+  declare texto  e.
+
+  leia(a).
+
+  b := (2*a+1)/2.
+
+  se(b > 0){
+    escreva(a).
+    }
+  senao{
+    escreva(b).
+  }
+
+  se(b > a){
+    escreva(b).
+  }
+
+c:=5.
+
+  enquanto(c <= 10){
+    escreva(c).
+    c:=c+5.
+  }
+
+  d := 1.5.
+  
+  escreva(d).
+
+  
+  e := "IsiLanguage funcionando".
+
+  escreva(e).
+
+fimprog.

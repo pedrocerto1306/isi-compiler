@@ -7,6 +7,17 @@ package br.com.comp2022.isilang.parser;
     import br.com.comp2022.isilang.exceptions.IsiSemanticException;
     import java.util.ArrayList;
 
+    import br.com.comp2022.isilang.ast.IsiProgram;
+    import br.com.comp2022.isilang.ast.AbstractCommand;
+    import br.com.comp2022.isilang.ast.ComandoAtribuicao;
+    import br.com.comp2022.isilang.ast.ComandoLeitura;
+    import br.com.comp2022.isilang.ast.ComandoEscrita;
+    import br.com.comp2022.isilang.ast.ComandoEscrita;
+    import br.com.comp2022.isilang.ast.ComandoRep;
+    import br.com.comp2022.isilang.ast.ComandoSe;
+    import java.util.ArrayList;
+    import java.util.Stack;
+
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -143,6 +154,18 @@ public class IsiLangBaseListener implements IsiLangListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterTermo(IsiLangParser.TermoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTermo(IsiLangParser.TermoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterExpr(IsiLangParser.ExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -155,13 +178,61 @@ public class IsiLangBaseListener implements IsiLangListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTermo(IsiLangParser.TermoContext ctx) { }
+	@Override public void enterExprTermo(IsiLangParser.ExprTermoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTermo(IsiLangParser.TermoContext ctx) { }
+	@Override public void exitExprTermo(IsiLangParser.ExprTermoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBoolExpr(IsiLangParser.BoolExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolExpr(IsiLangParser.BoolExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBoolExprChild(IsiLangParser.BoolExprChildContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolExprChild(IsiLangParser.BoolExprChildContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBoolExprChildChild(IsiLangParser.BoolExprChildChildContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolExprChildChild(IsiLangParser.BoolExprChildChildContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBoolTermo(IsiLangParser.BoolTermoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolTermo(IsiLangParser.BoolTermoContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

@@ -7,7 +7,7 @@ public class IsiVariable extends IsiSymbol {
 
     private int type;
     private String value;
-    private boolean isUsed;
+    private boolean isInit = false;
 
     public IsiVariable(String name, int type, String value) {
         super(name);
@@ -15,12 +15,12 @@ public class IsiVariable extends IsiSymbol {
         this.value = value;
     }
 
-    public boolean isUsed() {
-        return isUsed;
+    public boolean isInit() {
+        return isInit;
     }
 
-    public void setUsed(boolean isUsed) {
-        this.isUsed = isUsed;
+    public void setInit(boolean isInit) {
+        this.isInit = isInit;
     }
 
     public int getType() {
@@ -45,17 +45,15 @@ public class IsiVariable extends IsiSymbol {
     }
 
     @Override
-    public String generateJavaCode()
-    {
+    public String generateJavaCode() {
         String str;
-        if (type == NUMBER)
-        {
+        if (type == NUMBER) {
             str = "double ";
-        }
-        else
-        {
+        } else if (type == TEXT) {
             str = "String ";
+        } else {
+            str = "boolean ";
         }
-        return str + " "+super.name+";";
+        return str + " " + super.name + ";";
     }
 }

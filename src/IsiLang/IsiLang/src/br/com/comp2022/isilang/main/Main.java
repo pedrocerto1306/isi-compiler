@@ -1,9 +1,6 @@
 package br.com.comp2022.isilang.main;
 
-import org.antlr.runtime.CharStream;
-import org.antlr.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.TokenStream;
 
 import br.com.comp2022.isilang.exceptions.IsiSemanticException;
 import br.com.comp2022.isilang.parser.IsiLangLexer;
@@ -22,6 +19,8 @@ public class Main {
             parser.prog();
 
             System.out.println("Build Successful!");
+
+            parser.generateJavaCode();
         } catch (IsiSemanticException isiEx) {
             System.err.println("Isi Semantic Error: " + isiEx.getMessage());
         } catch (Exception e) {

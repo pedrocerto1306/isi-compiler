@@ -7,6 +7,17 @@ package br.com.comp2022.isilang.parser;
     import br.com.comp2022.isilang.exceptions.IsiSemanticException;
     import java.util.ArrayList;
 
+    import br.com.comp2022.isilang.ast.IsiProgram;
+    import br.com.comp2022.isilang.ast.AbstractCommand;
+    import br.com.comp2022.isilang.ast.ComandoAtribuicao;
+    import br.com.comp2022.isilang.ast.ComandoLeitura;
+    import br.com.comp2022.isilang.ast.ComandoEscrita;
+    import br.com.comp2022.isilang.ast.ComandoEscrita;
+    import br.com.comp2022.isilang.ast.ComandoRep;
+    import br.com.comp2022.isilang.ast.ComandoSe;
+    import java.util.ArrayList;
+    import java.util.Stack;
+
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -115,6 +126,16 @@ public interface IsiLangListener extends ParseTreeListener {
 	 */
 	void exitCmdrepeticao(IsiLangParser.CmdrepeticaoContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link IsiLangParser#termo}.
+	 * @param ctx the parse tree
+	 */
+	void enterTermo(IsiLangParser.TermoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link IsiLangParser#termo}.
+	 * @param ctx the parse tree
+	 */
+	void exitTermo(IsiLangParser.TermoContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link IsiLangParser#expr}.
 	 * @param ctx the parse tree
 	 */
@@ -125,13 +146,53 @@ public interface IsiLangListener extends ParseTreeListener {
 	 */
 	void exitExpr(IsiLangParser.ExprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link IsiLangParser#termo}.
+	 * Enter a parse tree produced by {@link IsiLangParser#exprTermo}.
 	 * @param ctx the parse tree
 	 */
-	void enterTermo(IsiLangParser.TermoContext ctx);
+	void enterExprTermo(IsiLangParser.ExprTermoContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link IsiLangParser#termo}.
+	 * Exit a parse tree produced by {@link IsiLangParser#exprTermo}.
 	 * @param ctx the parse tree
 	 */
-	void exitTermo(IsiLangParser.TermoContext ctx);
+	void exitExprTermo(IsiLangParser.ExprTermoContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link IsiLangParser#boolExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolExpr(IsiLangParser.BoolExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link IsiLangParser#boolExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolExpr(IsiLangParser.BoolExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link IsiLangParser#boolExprChild}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolExprChild(IsiLangParser.BoolExprChildContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link IsiLangParser#boolExprChild}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolExprChild(IsiLangParser.BoolExprChildContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link IsiLangParser#boolExprChildChild}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolExprChildChild(IsiLangParser.BoolExprChildChildContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link IsiLangParser#boolExprChildChild}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolExprChildChild(IsiLangParser.BoolExprChildChildContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link IsiLangParser#boolTermo}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolTermo(IsiLangParser.BoolTermoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link IsiLangParser#boolTermo}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolTermo(IsiLangParser.BoolTermoContext ctx);
 }

@@ -1,29 +1,8 @@
 programa
 
-	declare number a, b, c, d.
-	declare text t.
+	declare number a, b, d.
 
-	a := 3;3.
+	a := 3.
 	b := 5.
-	c := 2.
-
-	t := a.
-
-	d := c * a + b.
-
-	enquanto (a<b) faça {
-		escreva(a).
-	}
-
-	escolha (a){
-		caso(1):
-			escreva(a).
-			quebra.
-		caso(2):
-			escreva(b).
-			quebra.
-	}
-
-    escreva(d).
 
 fimprog.

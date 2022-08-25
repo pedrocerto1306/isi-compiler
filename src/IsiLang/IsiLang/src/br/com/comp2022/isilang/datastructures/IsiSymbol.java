@@ -6,6 +6,8 @@ public abstract class IsiSymbol {
 
     public abstract String generateJavaCode();
 
+    public abstract String generateClangCode();
+
     public String getName() {
         return name;
     }

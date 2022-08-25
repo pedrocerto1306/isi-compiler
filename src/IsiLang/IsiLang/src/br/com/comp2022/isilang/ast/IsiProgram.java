@@ -3,6 +3,7 @@ package br.com.comp2022.isilang.ast;
 import br.com.comp2022.isilang.datastructures.IsiSymbol;
 import br.com.comp2022.isilang.datastructures.IsiSymbolTable;
 import br.com.comp2022.isilang.datastructures.IsiVariable;
+import br.com.comp2022.isilang.exceptions.IsiSemanticException;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -12,22 +13,24 @@ public class IsiProgram {
 	private IsiSymbolTable varTable;
 	private ArrayList<AbstractCommand> comandos;
 	private String programName;
-	private ArrayList<IsiVariable> testeArray;
 
-	public void generateTarget() {
+	public void generateJava() {
 		try {
 			StringBuilder str = new StringBuilder();
 			str.append("import java.util.Scanner;\n");
+			str.append("import java.math.*;\n");
 			str.append("public class Main{ \n");
-			str.append("  public static void main(String args[]){\n ");
-			str.append("      Scanner _key = new Scanner(System.in);\n");
+			str.append("\tpublic static void main(String args[]){\n ");
+			str.append("\t\tScanner _key = new Scanner(System.in);\n");
 
 			for (IsiVariable symbol : varTable.getAll()) {
-				str.append(symbol.generateJavaCode() + "\n");
+				str.append("\t\t");
+				str.append(symbol.generateJavaCode());
 			}
 
 			for (AbstractCommand command : comandos) {
-				str.append(command.generateJavaCode() + "\n");
+				str.append("\t\t");
+				str.append(command.generateJavaCode());
 			}
 
 			str.append("  }");
@@ -42,6 +45,46 @@ public class IsiProgram {
 			}
 		} catch (Exception e) {
 			System.err.println("Erro na geracao de codigo: " + e);
+		}
+	}
+
+	public void generateClang() {
+		try {
+			StringBuilder str = new StringBuilder();
+			str.append("#include <stdio.h>\n");
+			str.append("#include <math.h>\n");
+			str.append("int main(){ \n");
+
+			for (IsiVariable symbol : varTable.getAll()) {
+				str.append("\t\t");
+				str.append(symbol.generateClangCode());
+			}
+
+			for (AbstractCommand command : comandos) {
+				str.append("\t\t");
+				str.append(command.generateClangCode());
+			}
+
+			str.append("return 0;");
+			str.append("  }");
+			str.append("}");
+
+			try {
+				FileWriter fr = new FileWriter(new File("Main.c"));
+				fr.write(str.toString());
+				fr.close();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		} catch (Exception e) {
+			System.err.println("Erro na geracao de codigo: " + e);
+		}
+	}
+
+	public void varreVarTable(IsiSymbolTable varTable) {
+		for (IsiVariable symbol : varTable.getAll()) {
+			if (!symbol.isInit())
+				throw new IsiSemanticException("Variable not initialized: " + symbol.toString());
 		}
 	}
 

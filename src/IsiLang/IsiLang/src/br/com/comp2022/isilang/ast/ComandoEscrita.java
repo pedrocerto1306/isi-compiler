@@ -1,46 +1,46 @@
 package br.com.comp2022.isilang.ast;
 
-public class ComandoEscrita extends AbstractCommand
-{
+public class ComandoEscrita extends AbstractCommand {
 	private String id;
 	private String texto;
-	
-	public ComandoEscrita(String id)
-	{
+
+	public ComandoEscrita(String id) {
 		this.id = id;
 		this.texto = null;
 	}
 
-	public ComandoEscrita(String texto, boolean isText)
-	{
-		if (isText)
-		{
+	public ComandoEscrita(String texto, boolean isText) {
+		if (isText) {
 			this.texto = texto;
 			this.id = null;
-		} else
-		{
+		} else {
 			this.id = texto;
 			this.texto = null;
 		}
 	}
 
 	@Override
-	public String generateJavaCode()
-	{
-		if (id == null)
-		{
-			return "System.out.println(" + texto + ");";
-		} else
-		{
-			return "System.out.println(" + id + ");";
+	public String generateJavaCode() {
+		if (id == null) {
+			return "System.out.println(" + texto + ");\n";
+		} else {
+			return "System.out.println(" + id + ");\n";
 		}
-		
+
 	}
 
 	@Override
-	public String toString()
-	{
-		return    "CommandEscrita"
+	public String generateClangCode() {
+		if (id == null) {
+			return "printf(" + texto + ");\n";
+		} else {
+			return "printf(\"%lf\"" + id + ");\n";
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "CommandEscrita"
 				+ "[id="
 				+ id
 				+ "]"

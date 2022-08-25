@@ -19,7 +19,19 @@ public class ComandoRep extends AbstractCommand {
 		this.comandoRep = comandoRep;
 	}
 
+	@Override
 	public String generateJavaCode() {
+		StringBuilder str = new StringBuilder();
+		str.append("while (" + condicao + ") {\n");
+		for (AbstractCommand cmd : comandoRep) {
+			str.append(cmd.generateJavaCode());
+		}
+		str.append("}\n");
+		return str.toString();
+	}
+
+	@Override
+	public String generateClangCode() {
 		StringBuilder str = new StringBuilder();
 		str.append("while (" + condicao + ") {\n");
 		for (AbstractCommand cmd : comandoRep) {

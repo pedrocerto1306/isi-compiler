@@ -15,6 +15,7 @@ package br.com.comp2022.isilang.parser;
     import br.com.comp2022.isilang.ast.ComandoEscrita;
     import br.com.comp2022.isilang.ast.ComandoRep;
     import br.com.comp2022.isilang.ast.ComandoSe;
+    import br.com.comp2022.isilang.ast.ComandoOperacao;
     import java.util.ArrayList;
     import java.util.Stack;
 
@@ -125,6 +126,16 @@ public interface IsiLangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCmdrepeticao(IsiLangParser.CmdrepeticaoContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link IsiLangParser#cmdoperacao}.
+	 * @param ctx the parse tree
+	 */
+	void enterCmdoperacao(IsiLangParser.CmdoperacaoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link IsiLangParser#cmdoperacao}.
+	 * @param ctx the parse tree
+	 */
+	void exitCmdoperacao(IsiLangParser.CmdoperacaoContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link IsiLangParser#termo}.
 	 * @param ctx the parse tree

@@ -3,7 +3,7 @@ package br.com.comp2022.isilang.datastructures;
 public class IsiVariable extends IsiSymbol {
     public static final int NUMBER = 0;
     public static final int TEXT = 1;
-    public static final int BOOLEAN = 2;
+    public static final int INTEGER = 2;
 
     private int type;
     private String value;
@@ -52,8 +52,20 @@ public class IsiVariable extends IsiSymbol {
         } else if (type == TEXT) {
             str = "String ";
         } else {
-            str = "boolean ";
+            str = "int ";
         }
-        return str + " " + super.name + ";";
+        return str + " " + super.name + ";\n";
+    }
+
+    public String generateClangCode() {
+        String str;
+        if (type == NUMBER) {
+            str = "double ";
+        } else if (type == TEXT) {
+            str = "char[255] ";
+        } else {
+            str = "int ";
+        }
+        return str + " " + super.name + ";\n";
     }
 }

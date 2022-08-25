@@ -15,6 +15,7 @@ grammar IsiLang;
     import br.com.comp2022.isilang.ast.ComandoEscrita;
     import br.com.comp2022.isilang.ast.ComandoRep;
     import br.com.comp2022.isilang.ast.ComandoSe;
+    import br.com.comp2022.isilang.ast.ComandoOperacao;
     import java.util.ArrayList;
     import java.util.Stack;
 }
@@ -62,11 +63,20 @@ grammar IsiLang;
             IsiVariable var = symbolTable.getVar(id);
             var.setInit(true);
             symbolTable.replace(id, var);
-            System.out.println("Variavel inicializada");
         }else{
             throw new IsiSemanticException("Variable not initialized");
         }
     }
+
+    public boolean isOperator(String id) {
+		if ((char) id.charAt(0) == '+' || (char) id.charAt(0) == '-' || (char) id.charAt(0) == '*'
+				|| (char) id.charAt(0) == '/' | (char) id.charAt(0) == '^' | (char) id.charAt(0) == '$'
+						| (char) id.charAt(0) == '#') {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
     public boolean isNumber(String id){
         if(symbolTable.exists(id)){
@@ -78,8 +88,32 @@ grammar IsiLang;
         return false;
     }
 
+    public boolean isText(String id){
+        if(symbolTable.exists(id)){
+            IsiVariable var = symbolTable.getVar(id);
+            if(var.getType() == IsiVariable.TEXT)
+                return true;
+            return false;
+        }
+        return false;
+    }
+
+    public boolean isInt(String id){
+        if(symbolTable.exists(id)){
+            IsiVariable var = symbolTable.getVar(id);
+            if(var.getType() == IsiVariable.INTEGER)
+                return true;
+            return false;
+        }
+        return false;
+    }
+
     public void generateJavaCode(){
-        program.generateTarget();
+        program.generateJava();
+    }
+
+    public void generateClangCode(){
+        program.generateClang();
     }
 
 }
@@ -88,6 +122,7 @@ prog:
 	'programa' bloco 'fimprog.' {
             program.setVarTable(symbolTable);
             program.setComandos(stack.pop());
+            program.varreVarTable(symbolTable);
         };
 
 bloco:
@@ -129,12 +164,13 @@ cmddeclara:
 	)* PT;
 
 tipo:
-	'number' {_tipo = IsiVariable.NUMBER;}
+	'real' {_tipo = IsiVariable.NUMBER;}
 	| 'text' {_tipo = IsiVariable.TEXT;}
-	| 'bool' {_tipo = IsiVariable.BOOLEAN;};
+	| 'int' {_tipo = IsiVariable.INTEGER;};
 
 cmdescrita:
 	'escreva' AP ID { 
+                        _writeID = _input.LT(-1).getText();
                         verificaTabelaDeSimbolos(_input.LT(-1).getText());
                         verificaInicializacao(_input.LT(-1).getText());
                     } FP PT {
@@ -143,8 +179,8 @@ cmdescrita:
                     };
 
 cmdleitura:
-	'leia' AP ID { 
-                    verificaTabelaDeSimbolos(_input.LT(-1).getText()); 
+	'leia' AP ID {  _readID = _input.LT(-1).getText();
+                    verificaTabelaDeSimbolos(_readID); 
                 } FP PT {
                     initializeVar(_readID);
                     IsiVariable var = symbolTable.getVar(_readID);
@@ -177,11 +213,11 @@ cmdcondicao:
                     listTrue = stack.pop();
                 } (
 		'senao' ACH {
-                        falseThread = new ArrayList<AbstractCommand>();
-                        stack.push(falseThread);
-                    } (cmd)+ FCH {
-                    listFalse = stack.pop();
-                }
+                        curThread = new ArrayList<AbstractCommand>();
+                        stack.push(curThread);
+                    } (cmd+) FCH {
+                        listFalse = stack.pop();
+                    }
 	)? {
         cmd.setListaTrue(listTrue);
         cmd.setListaFalse(listFalse);
@@ -204,16 +240,36 @@ cmdrepeticao:
         stack.peek().add(cmd);
     };
 
+cmdoperacao:
+	ID OP ID { 
+        verificaTabelaDeSimbolos(_input.LT(-1).getText()); 
+        verificaTabelaDeSimbolos(_input.LT(-3).getText());
+    }
+	| ID OP NUMBER { 
+        verificaTabelaDeSimbolos(_input.LT(-3).getText());
+    }
+	| NUMBER OP NUMBER { 
+        String n1 = _input.LT(-3).getText();
+        String op = _input.LT(-2).getText();
+        String n2 = _input.LT(-1).getText();
+        ComandoOperacao cmd = new ComandoOperacao(n1, op, n2);
+        stack.peek().add(cmd);
+    };
+
 termo:
 	ID { verificaTabelaDeSimbolos(_input.LT(-1).getText()); }
 	| NUMBER
 	| TEXT
-	| BOOL;
+	| INTEGER;
 
-expr:
-	exprTermo (
-		OP { _exprContent += _input.LT(-1).getText(); } exprTermo
-	)*;
+expr: (exprTermo)*;
+// ( exprTermo {
+
+// } // { // String op = _input.LT(-2).getText(); // if (op == "POT") { // //
+// System.out.println(_input.LT(-2).getText()); // _exprContent = "Math.pow(" + //
+// _input.LT(-3).getText() + "," + _input.LT(-1).getText() // + ")"; // } else { // // _exprContent
+// += _input.LT(-1).getText(); // } // // System.out.println(_input.LT(-3).getText() +
+// _input.LT(-2).getText() + // _input.LT(-1).getText()); } )*;
 
 exprTermo:
 	ID {
@@ -230,12 +286,71 @@ exprTermo:
                     if(isNumber(_exprID) && !isNumber(id)){
                         throw new IsiSemanticException(getCurrentToken().getLine(), getCurrentToken().getCharPositionInLine(), "Symbol `" + _exprID  + "` expectating a 'numero' type, NOT a 'texto' type");
                     }
+                    if(isText(_exprID) && !isText(id)){
+                        throw new IsiSemanticException(getCurrentToken().getLine(), getCurrentToken().getCharPositionInLine(), "Symbol `" + _exprID  + "` expectating a 'texto' type, NOT a 'numero' type");
+                    }
+                    if(isInt(_exprID) && !isInt(id)){
+                        throw new IsiSemanticException(getCurrentToken().getLine(), getCurrentToken().getCharPositionInLine(), "Symbol `" + _exprID  + "` expectating a 'inteiro' type");
+                    }
                     _exprContent += _input.LT(-1).getText();
 
               }
 	| NUMBER {
+            //id := num ^ num
+            //id := num
+            String op = _input.LT(-2).getText(); 
+            String n2 = _input.LT(-1).getText(); 
+            if(isOperator(op)){
+                String n1 = _input.LT(-3).getText(); 
+                ComandoOperacao cmd = new ComandoOperacao(n1, op, n2); 
+                _exprContent += cmd.getExpression();
+                // _exprContent = "";
+                // stack.push(cmd);
+            } else { 
+                if((char)op.charAt(0) != ':' && (char)op.charAt(1) != '='){ 
+                    _exprContent = op + n2; 
+                }else{ 
                     if(!isNumber(_exprID)){
                         throw new IsiSemanticException(getCurrentToken().getLine(), getCurrentToken().getCharPositionInLine(), "Symbol `" + _exprID  + "` expectating a 'text' type, NOT a 'number' type");
+                    }
+                    _exprContent += _input.LT(-1).getText();
+                } //throw new IsiSemanticException(getCurrentToken().getLine(), getCurrentToken().getCharPositionInLine(),"Number expected to make an operation!")
+            }
+        }
+	| OP {
+            //id := num $
+            String number = _input.LT(-2).getText();
+            if(isOperator(_input.LT(-1).getText())){
+                String op = _input.LT(-1).getText();
+                if((char)_input.LT(-1).getText().charAt(0) == '$' || (char)_input.LT(-1).getText().charAt(0) == '#'){
+                    ComandoOperacao cmd = new ComandoOperacao(number, op);
+                    _exprContent = cmd.getExpression();
+                    // _exprContent = "";
+                    // stack.push(cmd);
+                }else if((char) _input.LT(-1).getText().charAt(0) == '^'){
+                    _exprContent = "";
+                }else{
+                    _exprContent = number + op;
+                }
+            }else{
+                if(!isNumber(_exprID)){
+                    throw new IsiSemanticException(getCurrentToken().getLine(), getCurrentToken().getCharPositionInLine(), "Symbol `" + _exprID  + "` expectating a 'text' type, NOT a 'number' type");
+                }
+                _exprContent += _input.LT(-1).getText();
+            }
+        }
+	// | OP NUMBER{ //id := num $ String number = _input.LT(-2).getText();
+	// if(isOperator(_input.LT(-1).getText())){ String op = _input.LT(-1).getText();
+	// if((char)_input.LT(-1).getText().charAt(0) == '$' || (char)_input.LT(-1).getText().charAt(0)
+	// == '#'){ ComandoOperacao cmd = new ComandoOperacao(number, op); _exprContent +=
+	// cmd.getExpression(); }else if((char) _input.LT(-1).getText().charAt(0) == '^'){
+	// System.out.println("Problema"); } }else{ if(!isNumber(_exprID)){ throw new
+	// IsiSemanticException(getCurrentToken().getLine(), getCurrentToken().getCharPositionInLine(),
+	// "Symbol `" + _exprID + "` expectating a 'text' type, NOT a 'number' type"); } _exprContent +=
+	// _input.LT(-1).getText(); } }
+	| INTEGER {
+                    if(!isInt(_exprID)){
+                        throw new IsiSemanticException(getCurrentToken().getLine(), getCurrentToken().getCharPositionInLine(), "Symbol `" + _exprID  + "` expectating a 'number' type, NOT a 'int' type");
                     }
                     _exprContent += _input.LT(-1).getText();
             }
@@ -296,7 +411,7 @@ ATTR: ':=';
 
 PT: '.';
 
-OP: '+' | '-' | '*' | '/' | '^' | '%' | '#';
+OP: '+' | '-' | '*' | '/' | '^' | '$' | '#';
 
 ACH: '{';
 
@@ -312,9 +427,9 @@ NUMBER: [0-9]+ ('.' [0-9]+)?;
 
 TEXT: ASP .*? ASP;
 
-BOOL: 'verdadeiro' | 'falso';
+INTEGER: [0-9]+ ([0-9]+)?;
 
-VAR: NUMBER | TEXT | BOOL;
+VAR: NUMBER | TEXT | INTEGER;
 
 ASP: '"';
 

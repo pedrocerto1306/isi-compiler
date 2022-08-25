@@ -15,6 +15,7 @@ package br.com.comp2022.isilang.parser;
     import br.com.comp2022.isilang.ast.ComandoEscrita;
     import br.com.comp2022.isilang.ast.ComandoRep;
     import br.com.comp2022.isilang.ast.ComandoSe;
+    import br.com.comp2022.isilang.ast.ComandoOperacao;
     import java.util.ArrayList;
     import java.util.Stack;
 
@@ -149,6 +150,18 @@ public class IsiLangBaseListener implements IsiLangListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCmdrepeticao(IsiLangParser.CmdrepeticaoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCmdoperacao(IsiLangParser.CmdoperacaoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCmdoperacao(IsiLangParser.CmdoperacaoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

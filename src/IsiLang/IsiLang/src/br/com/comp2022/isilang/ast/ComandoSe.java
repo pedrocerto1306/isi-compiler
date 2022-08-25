@@ -48,6 +48,24 @@ public class ComandoSe extends AbstractCommand {
 	}
 
 	@Override
+	public String generateClangCode() {
+		StringBuilder str = new StringBuilder();
+		str.append("if (" + condicao + ") {\n");
+		for (AbstractCommand cmd : listaTrue) {
+			str.append(cmd.generateJavaCode());
+		}
+		str.append("}");
+		if (listaFalse.size() > 0) {
+			str.append(" else {\n");
+			for (AbstractCommand cmd : listaFalse) {
+				str.append(cmd.generateJavaCode());
+			}
+			str.append("}\n");
+		}
+		return str.toString();
+	}
+
+	@Override
 	public String toString() {
 		return "ComandoSe "
 				+ "[condicao="

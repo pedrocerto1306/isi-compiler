@@ -31,7 +31,14 @@ public class ComandoLeitura extends AbstractCommand {
     public String generateJavaCode() {
         return id
                 + "= _key."
-                + (var.getType() == IsiVariable.NUMBER ? "nextDouble();" : "next();");
+                + (var.getType() == IsiVariable.NUMBER ? "nextDouble();\n" : "next();\n");
+    }
+
+    @Override
+    public String generateClangCode() {
+        return "scanf("
+                + (var.getType() == IsiVariable.NUMBER ? "\"%lf\",&" + var.getName() + ";\n"
+                        : "\"%s\",&" + var.getName() + ";\n");
     }
 
     @Override

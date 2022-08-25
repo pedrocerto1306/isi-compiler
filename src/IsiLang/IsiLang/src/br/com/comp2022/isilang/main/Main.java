@@ -21,6 +21,8 @@ public class Main {
             System.out.println("Build Successful!");
 
             parser.generateJavaCode();
+
+            System.out.println("Code Generated!");
         } catch (IsiSemanticException isiEx) {
             System.err.println("Isi Semantic Error: " + isiEx.getMessage());
         } catch (Exception e) {

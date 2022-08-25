@@ -12,6 +12,6 @@ int main(){
 		d=sqrt(a);
 		b=log(d);
 		resposta="teste";
-		printf("%lf",resposta);
+		printf("%s",resposta);
 	return 0;
 }

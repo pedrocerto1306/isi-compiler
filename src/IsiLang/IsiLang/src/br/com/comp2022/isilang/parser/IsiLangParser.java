@@ -621,7 +621,8 @@ public class IsiLangParser extends Parser {
 			setState(82);
 			match(PT);
 
-			                        ComandoEscrita cmd = new ComandoEscrita(_writeID);
+			                        IsiVariable var = symbolTable.getVar(_writeID);
+			                        ComandoEscrita cmd = new ComandoEscrita(var);
 			                        stack.peek().add(cmd);   
 			                    
 			}

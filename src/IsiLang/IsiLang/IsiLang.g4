@@ -174,7 +174,8 @@ cmdescrita:
                         verificaTabelaDeSimbolos(_input.LT(-1).getText());
                         verificaInicializacao(_input.LT(-1).getText());
                     } FP PT {
-                        ComandoEscrita cmd = new ComandoEscrita(_writeID);
+                        IsiVariable var = symbolTable.getVar(_writeID);
+                        ComandoEscrita cmd = new ComandoEscrita(var);
                         stack.peek().add(cmd);   
                     };
 

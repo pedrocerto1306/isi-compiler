@@ -37,8 +37,8 @@ public class ComandoLeitura extends AbstractCommand {
     @Override
     public String generateClangCode() {
         return "scanf("
-                + (var.getType() == IsiVariable.NUMBER ? "\"%lf\",&" + var.getName() + ";\n"
-                        : "\"%s\",&" + var.getName() + ";\n");
+                + (var.getType() == IsiVariable.NUMBER ? "\"%lf\",&" + var.getName() + ");\n"
+                        : "\"%s\",&" + var.getName() + ");\n");
     }
 
     @Override

@@ -26,6 +26,7 @@ public class ComandoOperacao extends AbstractCommand {
     public ComandoOperacao(String n1, String op, String n2) {
         this.n1 = n1;
         this.op = op;
+        this.n2 = n2;
 
         if ((char) this.op.charAt(0) == '^') {
             this.result = "Math.pow(" + this.n1 + "," + this.n2 + ")";

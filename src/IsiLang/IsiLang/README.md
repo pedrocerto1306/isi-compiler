@@ -21,3 +21,4 @@ https://youtu.be/TrlI7JFY4Dw
 - `Verificar se há variáveis declaradas e não-utilizadas (warning)`: Varredura da tabela de simbolos         (OK);
 - `Geração de pelo menos 1 linguagem destino (C/Java/Python)`       Geração de código Java      (OK);
 - `Criar um editor Web para o código`  Editor de código HTML/JS     (OK)
+- `Geração de código para mais de uma linguagem diferente`          Geração de código C         (OK);

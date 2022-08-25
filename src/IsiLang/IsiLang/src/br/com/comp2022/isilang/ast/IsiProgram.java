@@ -65,13 +65,14 @@ public class IsiProgram {
 				str.append(command.generateClangCode());
 			}
 
-			str.append("return 0;");
-			str.append("  }");
+			str.append("\treturn 0;\n");
 			str.append("}");
+
+			String IsiToCLang = str.toString().replaceAll("Math.", "");
 
 			try {
 				FileWriter fr = new FileWriter(new File("Main.c"));
-				fr.write(str.toString());
+				fr.write(IsiToCLang);
 				fr.close();
 			} catch (Exception ex) {
 				ex.printStackTrace();

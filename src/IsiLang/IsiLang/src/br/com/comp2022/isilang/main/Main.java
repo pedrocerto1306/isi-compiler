@@ -21,6 +21,7 @@ public class Main {
             System.out.println("Build Successful!");
 
             parser.generateJavaCode();
+            parser.generateClangCode();
 
             System.out.println("Code Generated!");
         } catch (IsiSemanticException isiEx) {

@@ -34,7 +34,7 @@ public class ComandoEscrita extends AbstractCommand {
 		if (id == null) {
 			return "printf(" + texto + ");\n";
 		} else {
-			return "printf(\"%lf\"" + id + ");\n";
+			return "printf(\"%lf\"," + id + ");\n";
 		}
 	}
 

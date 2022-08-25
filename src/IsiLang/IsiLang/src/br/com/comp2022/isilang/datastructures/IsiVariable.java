@@ -60,12 +60,12 @@ public class IsiVariable extends IsiSymbol {
     public String generateClangCode() {
         String str;
         if (type == NUMBER) {
-            str = "double ";
+            str = "double " + super.name + ";\n";
         } else if (type == TEXT) {
-            str = "char[255] ";
+            str = "char " + super.name + "[255];\n";
         } else {
-            str = "int ";
+            str = "int " + super.name + ";\n";
         }
-        return str + " " + super.name + ";\n";
+        return str;
     }
 }

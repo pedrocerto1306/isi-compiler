@@ -53,6 +53,7 @@ public class IsiProgram {
 			StringBuilder str = new StringBuilder();
 			str.append("#include <stdio.h>\n");
 			str.append("#include <math.h>\n");
+			str.append("#include <string.h>\n\n");
 			str.append("int main(){ \n");
 
 			for (IsiVariable symbol : varTable.getAll()) {

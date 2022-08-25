@@ -196,7 +196,8 @@ cmdattrib:
         } ATTR { _exprContent = ""; } expr PT {
             initializeVar(_exprID);
             //verifyType(_exprID, _exprContent); //Comparar o tipo da variavel com o tipo da expressão
-            ComandoAtribuicao cmd = new ComandoAtribuicao(_exprID, _exprContent);
+            IsiVariable var = symbolTable.getVar(_exprID);
+            ComandoAtribuicao cmd = new ComandoAtribuicao(var, _exprContent);
             stack.peek().add(cmd);
 		};
 

@@ -45,7 +45,7 @@ function createScript() {
 
     //Pseudo lexer para highlight
     scriptArea.addEventListener("blur", (e) => {
-        e.target.innerHTML = e.target.innerHTML.replace(/programa|declare|leia|escreva|senao|se|entao|fimprog./gi, (match) => {
+        e.target.innerHTML = e.target.innerHTML.replace(/programa|declare|leia|escreva|senao|se|entao|real|text|enquanto|faça|fimprog./gi, (match) => {
             if (match == 'programa' || match == 'fimprog.') {
                 return `<span style='color: #0066ff; font-weight:550;'>${match}</span>`
             } else if (match == 'se' || match == 'senao' || match == 'entao') {
